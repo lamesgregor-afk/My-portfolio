@@ -1,0 +1,22 @@
+{
+  "name": "liam-gregor-portfolio",
+  "version": "1.0.0",
+  "description": "Portfolio site for Liam Gregor",
+  "private": true,
+  "scripts": {
+    "dev": "npx serve public",
+    "db:migrate": "node db/migrate.js"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^0.10.4",
+    "@vercel/blob": "^2.4.0",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "devDependencies": {
+    "pg": "^8.13.1",
+    "vercel": "^54.2.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
