@@ -4,10 +4,11 @@
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
-import pg from 'pg';
+import { createRequire } from 'module';
 import 'dotenv/config';
 
-const { Client } = pg;
+const require = createRequire(import.meta.url);
+const { Client } = require('pg');
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname  = dirname(__filename);
