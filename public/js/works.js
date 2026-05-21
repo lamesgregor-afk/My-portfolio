@@ -1,5 +1,7 @@
 // Works section — fetch from API, render cards, filter by tag
 
+import { openWorkModal } from './modal.js';
+
 let allWorks = [];
 let activeFilter = 'All';
 
@@ -65,6 +67,15 @@ function renderWorks(filter) {
   }
 
   grid.innerHTML = filtered.map(work => cardHTML(work)).join('');
+
+  // Attach click → open modal
+  grid.querySelectorAll('.work-card').forEach((el, i) => {
+    el.style.cursor = 'pointer';
+    el.addEventListener('click', e => {
+      if (e.target.closest('.work-link')) return; // let links work normally
+      openWorkModal(filtered[i]);
+    });
+  });
 
   // Re-trigger GSAP batch animations for newly rendered cards
   if (window.ScrollTrigger) {

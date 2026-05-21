@@ -1,5 +1,6 @@
-// GET    /api/works/:id — Public
+// GET    /api/works/:id — Public (also increments view_count via PATCH)
 // PUT    /api/works/:id — Admin only
+// PATCH  /api/works/:id — Public: increment view count
 // DELETE /api/works/:id — Admin only
 
 import sql from '../../lib/db.js';
@@ -18,6 +19,16 @@ export default async function handler(req, res) {
     const rows = await sql`SELECT * FROM works WHERE id = ${numId} AND is_visible = TRUE`;
     if (!rows.length) return res.status(404).json({ error: 'Not found' });
     return res.status(200).json(rows[0]);
+  }
+
+  // ---------- PATCH (view count) ----------
+  if (req.method === 'PATCH') {
+    const { action } = req.body || {};
+    if (action === 'view') {
+      await sql`UPDATE works SET view_count = COALESCE(view_count, 0) + 1 WHERE id = ${numId}`;
+      return res.status(200).json({ ok: true });
+    }
+    return res.status(400).json({ error: 'Unknown action' });
   }
 
   // ---------- PUT ----------
@@ -55,5 +66,5 @@ export default async function handler(req, res) {
     return res.status(200).json({ ok: true });
   }
 
-  allowMethods(req, res, ['GET', 'PUT', 'DELETE']);
+  allowMethods(req, res, ['GET', 'PATCH', 'PUT', 'DELETE']);
 }

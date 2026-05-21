@@ -16,12 +16,28 @@
 
   <!-- Styles -->
   <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="/css/additions.css" />
+
+  <!-- Prevent theme flash -->
+  <script>
+    (function() {
+      const t = localStorage.getItem('lg-theme') || 'dark';
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
 
   <!-- GSAP CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
 </head>
 <body>
+
+  <!-- Page Loader -->
+  <div id="page-loader" aria-hidden="true">
+    <div id="loader-name">Liam<span>.</span></div>
+    <div id="loader-tagline">Web Developer</div>
+    <div id="loader-bar-wrap"><div id="loader-bar"></div></div>
+  </div>
 
   <!-- ============ NAVBAR ============ -->
   <header class="navbar" role="banner">
@@ -39,6 +55,8 @@
       </nav>
 
       <div class="nav-auth">
+        <!-- Theme toggle -->
+        <button class="btn-theme" id="theme-toggle" aria-label="Switch to light mode" title="Toggle theme"></button>
         <!-- Shown when logged out -->
         <button class="btn-nav-login" id="nav-login-btn" aria-label="Sign in with Google">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16">
@@ -228,6 +246,22 @@
             </svg>
             lamesgregor@gmail.com
           </a>
+
+          <!-- Contact form -->
+          <form class="contact-form" id="contact-form" novalidate>
+            <div class="contact-form-row">
+              <div class="form-field">
+                <input type="text"  id="contact-name"        placeholder="Your name"  required />
+              </div>
+              <div class="form-field">
+                <input type="email" id="contact-email-field" placeholder="Your email" required />
+              </div>
+            </div>
+            <div class="form-field">
+              <textarea id="contact-message" placeholder="Tell me about your project…" required></textarea>
+            </div>
+            <button type="submit" class="btn-submit" id="contact-submit-btn">Send message</button>
+          </form>
 
           <div class="contact-socials">
             <!-- GitHub -->

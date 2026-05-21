@@ -6,8 +6,8 @@ import { showToast } from './app.js';
 let selectedRating = 0;
 
 export async function initReviews() {
-  await loadReviews();
-  initReviewForm();
+  const reviews = await loadReviews();
+  initReviewForm(reviews);
 }
 
 async function loadReviews() {
@@ -25,8 +25,10 @@ async function loadReviews() {
     }
 
     grid.innerHTML = reviews.map(reviewCardHTML).join('');
+    return reviews;
   } catch {
     grid.innerHTML = '<p style="color:var(--text-muted); text-align:center; padding: 40px 0;">Could not load reviews.</p>';
+    return [];
   }
 }
 
@@ -56,7 +58,7 @@ function reviewCardHTML(review) {
   `;
 }
 
-function initReviewForm() {
+function initReviewForm(existingReviews) {
   const formArea = document.getElementById('review-form-area');
   if (!formArea) return;
 
@@ -73,6 +75,20 @@ function initReviewForm() {
       </div>
     `;
     window.loginWithGoogle = loginWithGoogle;
+    return;
+  }
+
+  // Check if user already submitted a review
+  const alreadyReviewed = Array.isArray(existingReviews) &&
+    existingReviews.some(r => r.author_name === user.name);
+
+  if (alreadyReviewed) {
+    formArea.innerHTML = `
+      <div class="review-form-wrapper" style="text-align:center;color:var(--text-secondary)">
+        <p style="font-size:1.5rem;margin-bottom:12px">✅</p>
+        <p>You've already submitted a review. Thank you, ${escHtml(user.name.split(' ')[0])}!</p>
+      </div>
+    `;
     return;
   }
 

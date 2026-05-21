@@ -4,6 +4,11 @@ import { initAuth } from './auth.js';
 import { initWorks } from './works.js';
 import { initReviews } from './reviews.js';
 import { initAnimations } from './animations.js';
+import { initCursor } from './cursor.js';
+import { initTheme } from './theme.js';
+import { initContactForm } from './contact.js';
+import { initModal } from './modal.js';
+import { initLoader } from './loader.js';
 
 // ---- Toast system ----
 const toastContainer = document.createElement('div');
@@ -69,10 +74,22 @@ function checkAuthError() {
 
 // ---- Boot ----
 document.addEventListener('DOMContentLoaded', async () => {
+  // Theme first (no flash)
+  initTheme();
+
+  // Cursor
+  initCursor();
+
+  // Loading screen
+  await initLoader();
+
   initNavbar();
   checkAuthError();
 
-  // Auth must load before reviews (review form depends on user state)
+  // Modal
+  initModal();
+
+  // Auth must load before reviews
   await initAuth();
 
   // Load sections in parallel
@@ -80,6 +97,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     initWorks(),
     initReviews(),
   ]);
+
+  // Contact form
+  initContactForm();
 
   // Animations last (after DOM content is present)
   initAnimations();
