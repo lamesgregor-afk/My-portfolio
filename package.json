@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Portfolio site for Liam Gregor",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "npx serve public",
     "db:migrate": "node db/migrate.js"

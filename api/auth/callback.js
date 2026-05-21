@@ -40,15 +40,21 @@ export default async function handler(req, res) {
     // 3. Upsert user in database
     const isAdmin = profile.email === process.env.ADMIN_EMAIL;
 
-    const rows = await sql`
-      INSERT INTO users (google_id, email, name, avatar_url, is_admin)
-      VALUES (${profile.id}, ${profile.email}, ${profile.name}, ${profile.picture}, ${isAdmin})
-      ON CONFLICT (google_id) DO UPDATE
-        SET name       = EXCLUDED.name,
-            avatar_url = EXCLUDED.avatar_url,
-            is_admin   = ${isAdmin}
-      RETURNING id, email, name, avatar_url, is_admin
-    `;
+    let rows;
+    try {
+      rows = await sql`
+        INSERT INTO users (google_id, email, name, avatar_url, is_admin)
+        VALUES (${profile.id}, ${profile.email}, ${profile.name || 'User'}, ${profile.picture || null}, ${isAdmin})
+        ON CONFLICT (google_id) DO UPDATE
+          SET name       = EXCLUDED.name,
+              avatar_url = EXCLUDED.avatar_url,
+              is_admin   = ${isAdmin}
+        RETURNING id, email, name, avatar_url, is_admin
+      `;
+    } catch (dbErr) {
+      console.error('Database error:', dbErr);
+      throw dbErr;
+    }
 
     const user = rows[0];
 
