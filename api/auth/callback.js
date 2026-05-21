@@ -62,8 +62,9 @@ export default async function handler(req, res) {
     const token = createToken(user);
     res.setHeader('Set-Cookie', buildSetCookie(token));
 
-    // 5. Redirect
-    res.redirect(user.is_admin ? '/admin' : '/');
+    // 5. Redirect — always use the canonical domain
+    const base = process.env.NEXT_PUBLIC_URL || `https://${req.headers.host}`;
+    res.redirect(user.is_admin ? `${base}/admin` : `${base}/`);
   } catch (err) {
     console.error('OAuth callback error:', err);
     res.redirect('/?auth=error');
