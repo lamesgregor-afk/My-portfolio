@@ -3,6 +3,9 @@
               Contact Form, View Count
    ============================================= */
 
+/* ---- Utility ---- */
+.hidden { display: none !important; }
+
 /* ---- Theme: light mode overrides ---- */
 [data-theme="light"] {
   --bg-primary:    #f5f5f7;
