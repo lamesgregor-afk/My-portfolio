@@ -35,6 +35,11 @@ async function checkAdminAccess() {
   initTabs();
   initWorkModal();
   initLogout();
+
+  // Show works tab by default
+  document.getElementById('tab-works').classList.remove('hidden');
+  document.getElementById('tab-works').classList.add('active');
+
   await loadWorks();
 };
 
@@ -49,9 +54,15 @@ function initTabs() {
       btn.classList.add('active');
       btn.setAttribute('aria-current', 'true');
 
-      document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.admin-tab').forEach(t => {
+        t.classList.remove('active');
+        t.classList.add('hidden');
+      });
       const targetTab = document.getElementById(`tab-${tab}`);
-      if (targetTab) targetTab.classList.add('active');
+      if (targetTab) {
+        targetTab.classList.remove('hidden');
+        targetTab.classList.add('active');
+      }
 
       document.getElementById('admin-page-title').textContent =
         tab.charAt(0).toUpperCase() + tab.slice(1);
