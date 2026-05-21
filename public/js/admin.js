@@ -36,7 +36,7 @@ async function checkAdminAccess() {
   initWorkModal();
   initLogout();
   await loadWorks();
-});
+};
 
 // ---- Tabs ----
 function initTabs() {
